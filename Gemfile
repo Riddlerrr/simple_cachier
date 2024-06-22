@@ -1,9 +1,10 @@
-# frozen_string_literal: true
-
 source "https://rubygems.org"
 
-gem "rspec", "~> 3.13"
+group :test do
+  gem "rspec", "~> 3.13"
+  gem "factory_bot", "~> 6.4"
+end
 
 group :development do
-  gem "standard", require: false
+  gem "standard", "~> 1.37", require: false
 end
