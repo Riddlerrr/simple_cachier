@@ -96,7 +96,7 @@ RSpec.describe Checkout do
     end
 
     context "when offers are registered" do
-      let(:checkout) { Checkout.new("GR1" => "BuyOneGetOneFree") }
+      let(:checkout) { Checkout.new(offers) }
 
       context "buy one get one free" do
         let(:offers) { {"GR1" => :BuyOneGetOneFree} }
@@ -109,6 +109,22 @@ RSpec.describe Checkout do
 
         it "returns the total price of all items with discount" do
           is_expected.to eq 8.11 # 3.11 + 5 - 3.11 (discount)
+        end
+      end
+
+      context "buy bulk with fixed discount" do
+        let(:offers) { {"SR1" => :BuyBulkWithFixedDiscount} }
+
+        before do
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan(FactoryBot.build(:item, :green_tea))
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+        end
+
+        it "returns the total price of all items with discount" do
+          is_expected.to eq 21.11 # 5 * 4 + 3.11 - 2 (4 * 0.5 discount)
         end
       end
     end

@@ -1,4 +1,5 @@
 require "offers/buy_one_get_one_free"
+require "offers/buy_bulk_with_fixed_discount"
 
 class Offers
   attr_reader :registered_offers
@@ -9,13 +10,14 @@ class Offers
 
   def register(product_number:, offer:)
     offer_class = "Offers::#{offer}"
-    @registered_offers[product_number.to_sym] = Object.const_get(offer_class).new
+    @registered_offers[product_number.upcase.to_sym] = Object.const_get(offer_class).new
   end
 
   def apply_discount(item)
-    return 0 unless @registered_offers.key?(item.product_number.to_sym)
+    product_number = item.product_number.upcase.to_sym
+    return 0 unless @registered_offers.key?(product_number)
 
-    @registered_offers[item.product_number.to_sym].discount(item)
+    @registered_offers[product_number].discount(item)
   end
 
   def empty?

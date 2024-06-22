@@ -29,7 +29,6 @@ class Checkout
     items.values.each do |item|
       discount += offers.apply_discount(item)
     end
-
     (sum_wo_discount - discount).round(2)
   end
 end
