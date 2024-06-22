@@ -7,4 +7,5 @@ end
 
 group :development do
   gem "standard", "~> 1.37", require: false
+  gem "debug", require: false
 end

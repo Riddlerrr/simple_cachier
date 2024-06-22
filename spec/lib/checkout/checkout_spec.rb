@@ -6,6 +6,23 @@ RSpec.describe Checkout do
 
     it "creates a new instance of Checkout" do
       is_expected.to be_an_instance_of(Checkout)
+
+      expect(subject.items).to be_empty
+      expect(subject.offers).to be_empty
+    end
+
+    context "when offers are provided" do
+      let(:offers) { {"GR1" => "BuyOneGetOneFree"} }
+
+      subject { Checkout.new(offers) }
+
+      it "creates a new instance of Checkout with offers" do
+        is_expected.to be_an_instance_of(Checkout)
+
+        expect(subject.items).to be_empty
+        expect(subject.offers).to be_an_instance_of(Offers)
+        expect(subject.offers.count).to eq 1
+      end
     end
   end
 
@@ -20,20 +37,20 @@ RSpec.describe Checkout do
 
       is_expected.to be 1
 
-      expect(checkout.items.keys).to contain_exactly(item)
-      expect(checkout.items[item]).to eq 1
+      expect(checkout.items.keys).to contain_exactly(:GR1)
+      expect(checkout.items[:GR1].count).to eq 1
     end
 
     context "when the item is already scanned" do
-      before { checkout.scan(item) }
+      before { checkout.scan(FactoryBot.build(:item)) }
 
       it "can scan an item and increment the quantity" do
         expect(checkout.items).not_to be_empty
 
         is_expected.to be 2
 
-        expect(checkout.items.keys).to contain_exactly(item)
-        expect(checkout.items[item]).to eq 2
+        expect(checkout.items.keys).to contain_exactly :GR1
+        expect(checkout.items[:GR1].count).to eq 2
       end
     end
   end
@@ -41,38 +58,58 @@ RSpec.describe Checkout do
   describe "#total" do
     subject(:total) { checkout.total }
 
-    let(:checkout) { Checkout.new }
+    context "when no offers are registered" do
+      let(:checkout) { Checkout.new }
 
-    context "when there is no item scanned" do
-      it "returns 0" do
-        is_expected.to eq 0
+      context "when there is no item scanned" do
+        it "returns 0" do
+          is_expected.to eq 0
+        end
+      end
+
+      context "when there are items scanned" do
+        before do
+          checkout.scan(FactoryBot.build(:item, :green_tea))
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan(FactoryBot.build(:item, :coffee))
+        end
+
+        it "returns the total price of all items" do
+          is_expected.to eq 19.34 # 3.11 + 5 + 11.23
+        end
+      end
+
+      context "when there are multiple items scanned" do
+        before do
+          checkout.scan(FactoryBot.build(:item, :green_tea))
+          checkout.scan(FactoryBot.build(:item, :green_tea))
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan(FactoryBot.build(:item, :coffee))
+        end
+
+        it "returns the total price of all items" do
+          is_expected.to eq 32.45 # 3.11 * 2 + 5 * 3 + 11.23
+        end
       end
     end
 
-    context "when there are items scanned" do
-      before do
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :strawberries))
-        checkout.scan(FactoryBot.build(:item, :coffee))
-      end
+    context "when offers are registered" do
+      let(:checkout) { Checkout.new("GR1" => "BuyOneGetOneFree") }
 
-      it "returns the total price of all items" do
-        is_expected.to eq 19.34 # 3.11 + 5 + 11.23
-      end
-    end
+      context "buy one get one free" do
+        let(:offers) { {"GR1" => :BuyOneGetOneFree} }
 
-    context "when there are multiple items scanned" do
-      before do
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :strawberries))
-        checkout.scan(FactoryBot.build(:item, :strawberries))
-        checkout.scan(FactoryBot.build(:item, :strawberries))
-        checkout.scan(FactoryBot.build(:item, :coffee))
-      end
+        before do
+          checkout.scan(FactoryBot.build(:item, :green_tea))
+          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan(FactoryBot.build(:item, :green_tea))
+        end
 
-      it "returns the total price of all items" do
-        is_expected.to eq 32.45 # 3.11 * 2 + 5 * 3 + 11.23
+        it "returns the total price of all items with discount" do
+          is_expected.to eq 8.11 # 3.11 + 5 - 3.11 (discount)
+        end
       end
     end
   end
