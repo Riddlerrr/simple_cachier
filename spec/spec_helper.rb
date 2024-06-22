@@ -1,4 +1,5 @@
 require "factory_bot"
+require "checkout"
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
