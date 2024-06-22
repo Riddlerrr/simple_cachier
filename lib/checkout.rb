@@ -16,4 +16,8 @@ class Checkout
 
     @items[item]
   end
+
+  def total
+    @items.sum { |item, quantity| item.price * quantity }
+  end
 end

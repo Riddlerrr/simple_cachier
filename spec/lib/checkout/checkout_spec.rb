@@ -37,4 +37,43 @@ RSpec.describe Checkout do
       end
     end
   end
+
+  describe "#total" do
+    subject(:total) { checkout.total }
+
+    let(:checkout) { Checkout.new }
+
+    context "when there is no item scanned" do
+      it "returns 0" do
+        is_expected.to eq 0
+      end
+    end
+
+    context "when there are items scanned" do
+      before do
+        checkout.scan(FactoryBot.build(:item, :green_tea))
+        checkout.scan(FactoryBot.build(:item, :strawberries))
+        checkout.scan(FactoryBot.build(:item, :coffee))
+      end
+
+      it "returns the total price of all items" do
+        is_expected.to eq 19.34 # 3.11 + 5 + 11.23
+      end
+    end
+
+    context "when there are multiple items scanned" do
+      before do
+        checkout.scan(FactoryBot.build(:item, :green_tea))
+        checkout.scan(FactoryBot.build(:item, :green_tea))
+        checkout.scan(FactoryBot.build(:item, :strawberries))
+        checkout.scan(FactoryBot.build(:item, :strawberries))
+        checkout.scan(FactoryBot.build(:item, :strawberries))
+        checkout.scan(FactoryBot.build(:item, :coffee))
+      end
+
+      it "returns the total price of all items" do
+        is_expected.to eq 32.45 # 3.11 * 2 + 5 * 3 + 11.23
+      end
+    end
+  end
 end
