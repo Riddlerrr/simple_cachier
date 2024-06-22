@@ -127,6 +127,22 @@ RSpec.describe Checkout do
           is_expected.to eq 21.11 # 5 * 4 + 3.11 - 2 (4 * 0.5 discount)
         end
       end
+
+      context "buy bulk with percentage discount" do
+        let(:offers) { {"CF1" => :BuyBulkWithPercentageDiscount} }
+
+        before do
+          checkout.scan(FactoryBot.build(:item, :coffee))
+          checkout.scan(FactoryBot.build(:item, :coffee))
+          checkout.scan(FactoryBot.build(:item, :green_tea))
+          checkout.scan(FactoryBot.build(:item, :coffee))
+          checkout.scan(FactoryBot.build(:item, :coffee))
+        end
+
+        it "returns the total price of all items with discount" do
+          is_expected.to eq 33.21 # 11.23 * 4 + 3.11 - 14.82 (11.23 * 4 * 0.33 discount)
+        end
+      end
     end
   end
 end

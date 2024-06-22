@@ -1,5 +1,6 @@
 require "offers/buy_one_get_one_free"
 require "offers/buy_bulk_with_fixed_discount"
+require "offers/buy_bulk_with_percentage_discount"
 
 class Offers
   attr_reader :registered_offers
