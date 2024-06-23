@@ -7,19 +7,19 @@ class Checkout
   def initialize(offers = {})
     @items = {}
     @offers = Offers.new
-    offers.each { |product_number, offer| @offers.register(product_number: product_number, offer: offer) }
+    offers.each { |product_code, offer| @offers.register(product_code: product_code, offer: offer) }
   end
 
   def scan(item)
-    product_number = item.product_number.upcase.to_sym
+    product_code = item.product_code.upcase.to_sym
 
-    if @items.key?(product_number)
-      @items[product_number] += item
+    if @items.key?(product_code)
+      @items[product_code] += item
     else
-      @items[product_number] = item
+      @items[product_code] = item
     end
 
-    @items[product_number].count
+    @items[product_code].count
   end
 
   def total

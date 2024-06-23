@@ -9,16 +9,16 @@ class Offers
     @registered_offers = {}
   end
 
-  def register(product_number:, offer:)
+  def register(product_code:, offer:)
     offer_class = "Offers::#{offer}"
-    @registered_offers[product_number.upcase.to_sym] = Object.const_get(offer_class).new
+    @registered_offers[product_code.upcase.to_sym] = Object.const_get(offer_class).new
   end
 
   def apply_discount(item)
-    product_number = item.product_number.upcase.to_sym
-    return 0 unless @registered_offers.key?(product_number)
+    product_code = item.product_code.upcase.to_sym
+    return 0 unless @registered_offers.key?(product_code)
 
-    @registered_offers[product_number].discount(item)
+    @registered_offers[product_code].discount(item)
   end
 
   def empty?
