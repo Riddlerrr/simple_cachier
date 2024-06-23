@@ -50,3 +50,8 @@ CF1 | Coffee | £11.23
 
 ## Things that could be improved:
 - Add Money gem to return amounts with currency
+
+## How to run the tests
+```bash
+> bin/rspec
+```
