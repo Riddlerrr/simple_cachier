@@ -13,11 +13,11 @@ RSpec.describe Checkout do
 
     context "basket GR1,SR1,GR1,GR1,CF1" do
       before do
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :strawberries))
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :coffee))
+        checkout.scan("GR1")
+        checkout.scan("SR1")
+        checkout.scan("GR1")
+        checkout.scan("GR1")
+        checkout.scan("CF1")
       end
 
       it "returns the total price" do
@@ -27,8 +27,8 @@ RSpec.describe Checkout do
 
     context "basket GR1,GR1" do
       before do
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :green_tea))
+        checkout.scan("GR1")
+        checkout.scan("GR1")
       end
 
       it "returns the total price" do
@@ -38,10 +38,10 @@ RSpec.describe Checkout do
 
     context "basket SR1,SR1,GR1,SR1" do
       before do
-        checkout.scan(FactoryBot.build(:item, :strawberries))
-        checkout.scan(FactoryBot.build(:item, :strawberries))
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :strawberries))
+        checkout.scan("SR1")
+        checkout.scan("SR1")
+        checkout.scan("GR1")
+        checkout.scan("SR1")
       end
 
       it "returns the total price" do
@@ -51,11 +51,11 @@ RSpec.describe Checkout do
 
     context "basket GR1,CF1,SR1,CF1,CF1" do
       before do
-        checkout.scan(FactoryBot.build(:item, :green_tea))
-        checkout.scan(FactoryBot.build(:item, :coffee))
-        checkout.scan(FactoryBot.build(:item, :strawberries))
-        checkout.scan(FactoryBot.build(:item, :coffee))
-        checkout.scan(FactoryBot.build(:item, :coffee))
+        checkout.scan("GR1")
+        checkout.scan("CF1")
+        checkout.scan("SR1")
+        checkout.scan("CF1")
+        checkout.scan("CF1")
       end
 
       it "returns the total price" do

@@ -27,10 +27,9 @@ RSpec.describe Checkout do
   end
 
   describe "#scan" do
-    subject(:scan) { checkout.scan(item) }
+    subject(:scan) { checkout.scan("GR1") }
 
     let(:checkout) { Checkout.new }
-    let(:item) { FactoryBot.build(:item) }
 
     it "can scan an item and add it into items list" do
       expect(checkout.items).to be_empty
@@ -42,7 +41,7 @@ RSpec.describe Checkout do
     end
 
     context "when the item is already scanned" do
-      before { checkout.scan(FactoryBot.build(:item)) }
+      before { checkout.scan("GR1") }
 
       it "can scan an item and increment the quantity" do
         expect(checkout.items).not_to be_empty
@@ -69,9 +68,9 @@ RSpec.describe Checkout do
 
       context "when there are items scanned" do
         before do
-          checkout.scan(FactoryBot.build(:item, :green_tea))
-          checkout.scan(FactoryBot.build(:item, :strawberries))
-          checkout.scan(FactoryBot.build(:item, :coffee))
+          checkout.scan("GR1")
+          checkout.scan("SR1")
+          checkout.scan("CF1")
         end
 
         it "returns the total price of all items" do
@@ -81,12 +80,12 @@ RSpec.describe Checkout do
 
       context "when there are multiple items scanned" do
         before do
-          checkout.scan(FactoryBot.build(:item, :green_tea))
-          checkout.scan(FactoryBot.build(:item, :green_tea))
-          checkout.scan(FactoryBot.build(:item, :strawberries))
-          checkout.scan(FactoryBot.build(:item, :strawberries))
-          checkout.scan(FactoryBot.build(:item, :strawberries))
-          checkout.scan(FactoryBot.build(:item, :coffee))
+          checkout.scan("GR1")
+          checkout.scan("GR1")
+          checkout.scan("SR1")
+          checkout.scan("SR1")
+          checkout.scan("SR1")
+          checkout.scan("CF1")
         end
 
         it "returns the total price of all items" do
@@ -102,9 +101,9 @@ RSpec.describe Checkout do
         let(:offers) { {"GR1" => :BuyOneGetOneFree} }
 
         before do
-          checkout.scan(FactoryBot.build(:item, :green_tea))
-          checkout.scan(FactoryBot.build(:item, :strawberries))
-          checkout.scan(FactoryBot.build(:item, :green_tea))
+          checkout.scan("GR1")
+          checkout.scan("SR1")
+          checkout.scan("GR1")
         end
 
         it "returns the total price of all items with discount" do
@@ -116,11 +115,11 @@ RSpec.describe Checkout do
         let(:offers) { {"SR1" => :BuyBulkWithFixedDiscount} }
 
         before do
-          checkout.scan(FactoryBot.build(:item, :strawberries))
-          checkout.scan(FactoryBot.build(:item, :strawberries))
-          checkout.scan(FactoryBot.build(:item, :strawberries))
-          checkout.scan(FactoryBot.build(:item, :green_tea))
-          checkout.scan(FactoryBot.build(:item, :strawberries))
+          checkout.scan("SR1")
+          checkout.scan("SR1")
+          checkout.scan("SR1")
+          checkout.scan("GR1")
+          checkout.scan("SR1")
         end
 
         it "returns the total price of all items with discount" do
@@ -132,9 +131,9 @@ RSpec.describe Checkout do
         let(:offers) { {"CF1" => :BuyBulkWithPercentageDiscount} }
 
         before do
-          checkout.scan(FactoryBot.build(:item, :coffee))
-          checkout.scan(FactoryBot.build(:item, :coffee))
-          checkout.scan(FactoryBot.build(:item, :coffee))
+          checkout.scan("CF1")
+          checkout.scan("CF1")
+          checkout.scan("CF1")
         end
 
         it "returns the total price of all items with discount" do

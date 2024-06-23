@@ -10,16 +10,16 @@ class Checkout
     offers.each { |product_code, offer| @offers.register(product_code: product_code, offer: offer) }
   end
 
-  def scan(item)
-    product_code = item.product_code.upcase.to_sym
+  def scan(product_code)
+    item = Item.find(product_code)
 
-    if @items.key?(product_code)
-      @items[product_code] += item
+    if @items.key?(item.product_code)
+      @items[item.product_code] += item
     else
-      @items[product_code] = item
+      @items[item.product_code] = item
     end
 
-    @items[product_code].count
+    @items[item.product_code].count
   end
 
   def total
