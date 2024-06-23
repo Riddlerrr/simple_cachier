@@ -1,7 +1,7 @@
 class Offers
   class BuyBulkWithPercentageDiscount
     BULK_SIZE = 3
-    DISCOUNT = 0.33
+    DISCOUNT = "1/3".to_r # Rational number
 
     def initialize
       @name = "Buy 3 or more, to get a 33% discount"

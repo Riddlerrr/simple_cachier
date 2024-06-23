@@ -134,13 +134,11 @@ RSpec.describe Checkout do
         before do
           checkout.scan(FactoryBot.build(:item, :coffee))
           checkout.scan(FactoryBot.build(:item, :coffee))
-          checkout.scan(FactoryBot.build(:item, :green_tea))
-          checkout.scan(FactoryBot.build(:item, :coffee))
           checkout.scan(FactoryBot.build(:item, :coffee))
         end
 
         it "returns the total price of all items with discount" do
-          is_expected.to eq 33.21 # 11.23 * 4 + 3.11 - 14.82 (11.23 * 4 * 0.33 discount)
+          is_expected.to eq 22.46 # 11.23 * 3 - 11.23 (1/3 of price discount)
         end
       end
     end
