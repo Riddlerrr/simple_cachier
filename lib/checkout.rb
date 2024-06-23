@@ -23,12 +23,9 @@ class Checkout
   end
 
   def total
-    sum_wo_discount = @items.values.sum(&:amount)
+    amount_wo_discount = @items.values.sum(&:amount)
+    discount = items.values.sum { |item| offers.apply_discount(item) }
 
-    discount = 0
-    items.values.each do |item|
-      discount += offers.apply_discount(item)
-    end
-    (sum_wo_discount - discount).round(2)
+    (amount_wo_discount - discount).round(2)
   end
 end
