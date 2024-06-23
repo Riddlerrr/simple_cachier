@@ -12,7 +12,7 @@ class Item
   def self.find(product_code)
     product_code = product_code.upcase.to_sym
 
-    item = AVAILABLE_ITEMS.fetch(product_code)
+    item = AVAILABLE_ITEMS[product_code]
     raise NotFound unless item
 
     new(product_code: item[:product_code], name: item[:name], price: item[:price])
