@@ -12,7 +12,7 @@ class Offers
     def discount(item)
       return 0 unless item.count >= BULK_SIZE
 
-      item.price * item.count * DISCOUNT
+      item.amount * DISCOUNT
     end
   end
 end

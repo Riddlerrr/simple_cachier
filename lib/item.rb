@@ -6,6 +6,7 @@ class Item
     SR1: {product_code: :SR1, name: "Strawberries", price: 5},
     CF1: {product_code: :CF1, name: "Coffee", price: 11.23}
   }
+
   attr_reader :product_code, :name, :price, :count
 
   def self.find(product_code)
