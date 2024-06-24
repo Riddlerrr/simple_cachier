@@ -1,10 +1,10 @@
 # Cashier
-A simple cashier class that adds products to a cart and returns the total price. Can include offers with pricing rules.
+A simple cashier class that adds products to a cart and returns the total price. Can include offers with different pricing rules.
 
 ## Example
 
 ```ruby
-co = Checkout.new(pricing_rules)
+co = Checkout.new(offers)
 co.scan("GR1")
 co.scan("SR1")
 price = co.total
